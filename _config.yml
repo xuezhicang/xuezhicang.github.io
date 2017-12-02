@@ -1,6 +1,6 @@
 # SITE CONFIGURATION
-baseurl: "/Type-on-Strap"
-url: "https://cangxixi.github.io/"
+baseurl: ""
+url: "https://cangxixi.github.io"
 
 # THEME-SPECIFIC CONFIGURATION
 theme_settings:
