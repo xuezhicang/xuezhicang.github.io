@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Ninja
+title: CCisGOOD
 img: "assets/img/portfolio/ninja.png"
 date: April, 08 2014
 tags: [Lorem]
