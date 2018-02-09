@@ -6,8 +6,10 @@ feature-img: "assets/img/pexels/circuit.jpeg"
 tags: [About, Test]
 ---
 
-Xuezhi Cang, a PH.D.ph.d. candidate, is doing planetary science research in Northen Illinois Univeristy.
+I am Xuezhi Cang, a Geography Ph.D. candidate in Northern Illinois University.
 
+My research mainly focus on spatial analysis and Mars geomorphology.
+My research mainly focus on spatial analysis and Mars geomorphology.My research mainly focus on spatial analysis and Mars geomorphology.My research mainly focus on spatial analysis and Mars geomorphology.My research mainly focus on spatial analysis and Mars geomorphology.My research mainly focus on spatial analysis and Mars geomorphology.My research mainly focus on spatial analysis and Mars geomorphology.My research mainly focus on spatial analysis and Mars geomorphology.
 Type on Strap is based on Type Theme, a free and open-source theme for [Jekyll](http://jekyllrb.com/), licensed under the MIT License.
 
 Head over to the [theme's documentation](https://github.io/sylhare/Type-on-Strap) for much more information about Type on Strap or to install this theme on your own Jekyll site.
