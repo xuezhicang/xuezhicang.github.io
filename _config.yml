@@ -17,7 +17,7 @@ theme_settings:
      <p>My research mainly focus on spatial analysis and Mars geomorphology.</p>
 
      
-  header_text_feature_image: assets/img/pexels/triangular.jpeg
+  header_text_feature_image: assets/img/pexels/Mars_vn_depth.jpg
   footer_text: >
    Powered by <a href="https://jekyllrb.com/">Jekyll</a> with <a href="https://github.com/sylhare/Type-on-Strap">Type-on-Strap</a>
 
