@@ -6,7 +6,7 @@
 ### let us to simple things
 
 
-
+{% highlight python %}
 
 ```python
 1+6
@@ -43,3 +43,4 @@ for i in range(5):
 ```python
 
 ```
+{% endhighlight %}
