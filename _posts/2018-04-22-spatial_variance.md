@@ -22,7 +22,7 @@ Normally, the Fomula of variance is
 $$Var = {\sum_{i=1}^n (X_i-\bar{X})^2 \over N-1}\tag {2}$$
 
 If we want to extent the variance to its spatial form, we need to figure out the spatial $\bar{X}$. Since the spatial $\bar{X}$ is hard to define,we build our spatial variance on the other form of variance.This form of variance does not need the mean value and only need data in the set.
-$$Var = {\sum_{i} \sum_{i \neq j} {{(X_i-X_j})^2 \over 2} \over N(N-1)}\tag {3}$$
+$$Var = {\sum_{i} \sum_{i \neq j} {{(X_i-X_j)}^2 \over 2} \over N(N-1)}\tag {3}$$
 Does the equation ${2}$ looks familiar? Yes, this is the basic form of semi-variance, which used a lot in the kriging interpolation. The  transformation between equation ${2}$ and ${3}$ can be find in [Bachmaier and Backes 2008](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Variogram+or+semivariogram%3F+Understanding+the+variances+in+a+variogram&btnG=).
 
 ### 1.3 Spatial cross product
