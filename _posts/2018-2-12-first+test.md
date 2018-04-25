@@ -1,4 +1,8 @@
-
+---
+layout: post
+title: Blogging with title
+tags: [Test, Ipsum, Markdown, Portfolio]
+---
 # my first title in jupyter
 
 ## A very simple operation
