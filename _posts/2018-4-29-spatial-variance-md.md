@@ -44,7 +44,7 @@ For a extreme case, all the data pairs ($x_i$ and $x_j$) are treated as the 1. T
 Since we already expand the sum of square to its spatial form (spatial croee product). We can expand the variance to spatial variance.<br>
 
 The spatial variance is:
-$$Var_{spatial} = {{\sum_{i} \sum_{i \neq j} {W_{i,j}}{(x_i-x_j)^2}} \over {\sum_{i} \sum_{i \neq j} {W_{i,j}}}} \tag{5} $$ <br>
+$$Var_{spatial} = \sum_{i} \sum_{i \neq j} W_{i,j}{(x_i-x_j)^2} \over {\sum_{i} \sum_{i \neq j} W_{i,j}} \tag{5} $$ <br>
 
 Comparing the Equation ${5}$ to Equation ${2}$, we can also find that the Equation ${2}$ is the Equation ${5}$'s spetial case, which all the weights are the same.   
 
