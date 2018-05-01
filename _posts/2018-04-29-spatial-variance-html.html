@@ -11859,7 +11859,7 @@ $$Var = {\sum_{i=1}^n (X_i-\bar{X})^2 \over N-1}\tag {2}$$</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If we want to extent the variance to its spatial form, we need to figure out the spatial $\bar{X}$. Since the spatial $\bar{X}$ is hard to define,we build our spatial variance on the other form of variance.This form of variance does not need the mean value and only need data in the set.
-$$Var = {\sum_{i} \sum_{i \neq j} {(X_i-X_j)}^2 \over 2} \over N(N-1)\tag {3}$$
+$$Var = {{\sum_{i} \sum_{i \neq j} {(X_i-X_j)}^2 \over 2} \over N(N-1)}\tag {3}$$
 Does the equation ${2}$ looks familiar? Yes, this is the basic form of semi-variance, which used a lot in the kriging interpolation. The  transformation between equation ${2}$ and ${3}$ can be find in <a href="https://scholar.google.com/scholar?hl=en&amp;as_sdt=0%2C14&amp;q=Variogram+or+semivariogram%3F+Understanding+the+variances+in+a+variogram&amp;btnG=">Bachmaier and Backes 2008</a>.</p>
 
 </div>
@@ -11905,7 +11905,7 @@ where ${W_{i,j}}$ is the weight between $i$ and $j$.<br></p>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Since we already expand the sum of square to its spatial form (spatial croee product). We can expand the variance to spatial variance.<br></p>
 <p>The spatial variance is:
-$$Var_{spatial} = \sum_{i} \sum_{i \neq j} W_{i,j}{(x_i-x_j)^2} \over {\sum_{i} \sum_{i \neq j} W_{i,j}} \tag{5} $$ <br></p>
+$$Var_{spatial} = \sum_{i} \sum_{i \neq j} {W_{i,j}{(x_i-x_j)^2}} \over {\sum_{i} \sum_{i \neq j} W_{i,j}} \tag{5} $$ <br></p>
 <p>Comparing the Equation ${5}$ to Equation ${2}$, we can also find that the Equation ${2}$ is the Equation ${5}$'s spetial case, which all the weights are the same.</p>
 
 </div>
