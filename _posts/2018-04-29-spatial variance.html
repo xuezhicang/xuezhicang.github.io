@@ -258,7 +258,7 @@ $$Var = {\sum_{i=1}^n (X_i-\bar{X})^2 \over N-1}\tag {2}$$</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>If we want to extent the variance to its spatial form, we need to figure out the spatial $\bar{X}$. Since the spatial $\bar{X}$ is hard to define,we build our spatial variance on the other form of variance.This form of variance does not need the mean value and only need data in the set.
-$$Var = {{\sum_{i} \sum_{i \neq j} {(X_i-X_j)}^2 \over 2} \over N(N-1)}\tag {3}$$
+$$Var = \frac{\sum_{i} \sum_{i \neq j} {(X_i-X_j)}^2 \over 2} { N(N-1)}\tag {3}$$
 Does the equation ${2}$ looks familiar? Yes, this is the basic form of semi-variance, which used a lot in the kriging interpolation. The  transformation between equation ${2}$ and ${3}$ can be find in <a href="https://scholar.google.com/scholar?hl=en&as_sdt=0%2C14&q=Variogram+or+semivariogram%3F+Understanding+the+variances+in+a+variogram&btnG=">Bachmaier and Backes 2008</a>.</p>
 
 </div>
