@@ -3,7 +3,7 @@ layout: page
 title: About
 permalink: /about/
 feature-img: "assets/img/pexels/circuit.jpeg"
-tags: []
+tags: [about]
 ---
 
 I am Xuezhi Cang, a Geography Ph.D. candidate in Northern Illinois University.
