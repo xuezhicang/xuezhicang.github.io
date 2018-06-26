@@ -9,4 +9,4 @@ tags: [about]
 I am Xuezhi Cang, a Geography Ph.D. candidate in Northern Illinois University.
 My research mainly focus on spatial analysis and Mars geomorphology.
 
-[Google Scholar](https://scholar.google.com/citations?user=a3OHfGUAAAAJ&hl=en)
+Links [Google Scholar](https://scholar.google.com/citations?user=a3OHfGUAAAAJ&hl=en) [ResearchGate](https://www.researchgate.net/profile/Xuezhi_Cang)
