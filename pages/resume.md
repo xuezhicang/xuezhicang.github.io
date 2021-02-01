@@ -1,6 +1,6 @@
 ---
 layout: page
-title: resume
+title: Resume
 permalink: resume
 feature-img: "assets/img/pexels/Mars_vn_depth.jpg"
 tags: [resume]
