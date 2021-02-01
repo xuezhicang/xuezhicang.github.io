@@ -3,7 +3,7 @@ layout: page
 title: mmmm
 permalink: mmmm
 feature-img: "assets/img/pexels/Mars_vn_depth.jpg"
-tags: [mmmmmm]
+tags: [aaaa]
 ---
 
 My research mainly focus on spatial analysis and Mars geomorphology.
