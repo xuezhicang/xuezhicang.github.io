@@ -8,7 +8,7 @@ tags: [resume]
 
 My CV is as attached below.
  
-<center><embed src="assets/pdf/cv.pdf" width=100% height="2000"></center>
+<center><embed src="assets/pdf/cv.pdf" width="100%" height="2000"></center>
 
 
 
