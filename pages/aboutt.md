@@ -1,9 +1,9 @@
 ---
 layout: page
-title: About
-permalink: /about/
+title: Aboutt
+permalink: /aboutt/
 feature-img: "assets/img/pexels/Mars_vn_depth.jpg"
-tags: [about]
+tags: [aboutt]
 ---
 
 I am Xuezhi Cang, a Geography Ph.D. candidate in Northern Illinois University.
