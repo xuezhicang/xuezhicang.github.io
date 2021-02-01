@@ -42,7 +42,7 @@ theme_settings:
   tumblr:
   twitter:  #"twitter"
   wordpress:
-  youtube: https://www.youtube.com/channel/UComLfdnPsKAOhm8JZxdMsNg
+  youtube: UComLfdnPsKAOhm8JZxdMsNg
 
   # Scripts / Features 
   google_analytics: "UA-121369767-1"# Tracking ID, e.g. "UA-000000-01"
