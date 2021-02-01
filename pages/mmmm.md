@@ -8,7 +8,7 @@ tags: [aaaa]
 
 My research mainly focus on spatial analysis and Mars geomorphology.
 
-<center><embed src="assets/pdf/cv.pdf" width="850" height="600"></center>
+<center><embed src="assets/pdf/cv.pdf" width="2000" height="2000"></center>
 
 
 
