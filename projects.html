@@ -75,13 +75,32 @@
 
       <div class="row">
          <div class="col-sm-12">
-            <h1>Projects</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum quas fugiat repellendus ex adipisci! Consectetur dolorem facere perferendis placeat repellat aspernatur odio, explicabo, ab quaerat non saepe reprehenderit tempore, architecto neque eum quis culpa vel numquam voluptas dolores. Cumque similique vel culpa alias vero optio iusto, nisi deserunt officiis, perferendis, magni illum ad iure commodi magnam labore soluta atque. Exercitationem esse provident dolorum non vero incidunt nisi cum est dolorem quis accusamus, nemo autem vel labore adipisci voluptatum, repudiandae maxime at ratione ab dolore quam ducimus. Cupiditate.</p>
+            <h1>Using Spatial Heterogeneity to Measure the Spatial Association</h1>
 
+            <p>
+               Spatial heterogeneity refers to the landscapes' uneven spatial distribution within an area. If the two spatial layers have a causal relation, then their spatial pattern correlates. The Geographical detector (which applies variance analysis to investigate the association between spatial layers) measures the intensity of the correlation. Under the supervision of Prof. Luo, I used the Geographical detector to investigate the association between the dissection density and environmental factors in eight physiographic divisions of the contiguous United States. Along with my team, I co-authored a paper, which was published in Geophysical Research Letters. After my research, I realized the Geographical detector could be improved, despite being a popular method used in hundreds of research projects, since 2010. I improved the geographical association estimator by explicitly considering the effects of distance decay and level of discretization for continuous variables. The new method is called the SPatial Association DEtector (SPADE). I published my findings in the International Journal of Geographic Information Sciences (also released on GitHub).
+            </p>
+            <p>
+               After I built the SPADE, I used this method to measure the association between the junction angles and Earth environmental factors. I calculated the association between mean junction angles and mean/majority environmental factors (precipitation, aridity, lithology, and faults) grouped by the statistical units (watersheds or square grids). The results showed that the influence of climatic factors to the junction angles are stronger than or on par with the influence of geological factors, which means that junction angles are the fingerprint of long-term climate conditions. This conclusion has also been applied to my Mars research.
+            </p>
+
+
+
+            <h1>Using spatial analysis to test the early Mars climate hypothesis</h1>
+            <p>
+               The early Mars climatic conditions have been debated for decades. Based on the geomorphological evidence, Mars was “warm” enough to allow the liquid water to flow on the surface and had an ocean in its northern basin three billion years ago. However, many climate modelers have encountered difficulties in modeling such early “warm and wet” conditions with an above freezing temperature, mainly due to the faintness of the young Sun. To reconcile different views on early Mars climate, I selected valley networks (VNs), which offered convincing evidence for its past water activities, as my research object. Specifically, I extracted the volume of VNs to estimate the cumulative volume of water required to carve the VNs and analogized the frequency of junction angles on Earth and Mars to infer the duration of “warm” Mars.
+            </p>
+            <p>
+               To estimate the cumulative volume of water required to carve the VNs, I extracted VN’s volume by implementing a Python program. The program used the progressive black top hat (PBTH) transformation method, which is a morphological-based algorithm, to estimate the depth of each pixel and used the region growing algorithm, which is used to exclude the fault VNs, such as lava channels and faults, that are near the VN’s actual areas. This research has been published in the Nature communication.
+            </p>
+            <p>
+               After this research, I analogized the frequency of VNs’ junction angles between Earth and Mars to estimate the duration of “warm” Mars which allowed liquid water to flow on its surface. I selected frequency of junction angles because the frequency distribution of junction angles is less influenced by the post-formational modification processes than valley density and cross-section and can be accurately extracted from low resolution data. First, I applied the associations between terrestrial junction angle and climatic conditions to estimate the Aridity Index (AI) and Mean Annual Precipitation (MAP) of Mars. The duration of “warm” Mars is estimated by the ratio between cumulative volume of water required to carve the VNs and the runoff discharge derived from MAP. I published my findings in the Earth and Planetary Science Letters.
+            </p>
          </div>
 
       </div>
 
+      <!--
       <div class="row push-down-4" id="projects">
 
         <div class="col-sm-6 col-md-4">
@@ -249,6 +268,7 @@
                <div class="panel-footer">Lorem ipsum dolor.</div>
             </div>
          </div>
+         -->
 
       </div>
    <!-- .row -->
