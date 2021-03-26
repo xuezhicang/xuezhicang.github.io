@@ -12947,13 +12947,8 @@ ul.typeahead-list  > li > a.pull-right {
 /*# sourceMappingURL=style.min.css.map */
     </style>
 <style type="text/css">
-    pre { line-height: 125%; margin: 0; }
-td.linenos pre { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
-span.linenos { color: #000000; background-color: #f0f0f0; padding: 0 5px 0 5px; }
-td.linenos pre.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
-span.linenos.special { color: #000000; background-color: #ffffc0; padding: 0 5px 0 5px; }
-.highlight .hll { background-color: #ffffcc }
-.highlight { background: #f8f8f8; }
+    .highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
 .highlight .c { color: #408080; font-style: italic } /* Comment */
 .highlight .err { border: 1px solid #FF0000 } /* Error */
 .highlight .k { color: #008000; font-weight: bold } /* Keyword */
@@ -13115,7 +13110,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Our-task">Our task<a class="anchor-link" href="#Our-task">&#182;</a></h2><p>We have a global Martian flow accumulation raster data, which is generated from the gloabl Martian  DEM data, and a global Martian watersheds vector data consisting of a lot of polygons. Our task is to 1) split the watershed polygons to single files based on their ID, 2) extract the flow accumulation raster data to single raster files by using each watershed, and 3) export the watershed boundary to CSV file, whose watershed area is labeled as 1 and outlet cell is labeled as 2.</p>
+<h2 id="1.-Our-task">1. Our task<a class="anchor-link" href="#1.-Our-task">&#182;</a></h2><p>We have a global Martian flow accumulation raster data, which is generated from the gloabl Martian  DEM data, and a global Martian watersheds vector data consisting of a lot of polygons. Our task is to 1) split the watershed polygons to single files based on their ID, 2) extract the flow accumulation raster data to single raster files by using each watershed, and 3) export the watershed boundary to CSV file, whose watershed area is labeled as 1 and outlet cell is labeled as 2.</p>
 
 </div>
 </div>
@@ -13123,7 +13118,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Original-Strategy">Original Strategy<a class="anchor-link" href="#Original-Strategy">&#182;</a></h2>
+<h2 id="2.-Original-Strategy">2. Original Strategy<a class="anchor-link" href="#2.-Original-Strategy">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -13221,14 +13216,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Improved-Strategy">Improved Strategy<a class="anchor-link" href="#Improved-Strategy">&#182;</a></h2>
+<h2 id="3.Improved-Strategy">3.Improved Strategy<a class="anchor-link" href="#3.Improved-Strategy">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Parallel-Computing">Parallel Computing<a class="anchor-link" href="#Parallel-Computing">&#182;</a></h3><p>Since the tasks of function in the for-loop are similar and do not depend on each other. The parallel computing should be a good idea to accelerate our program's speed!</p>
+<h3 id="3.1Parallel-Computing">3.1Parallel Computing<a class="anchor-link" href="#3.1Parallel-Computing">&#182;</a></h3><p>Since the tasks of function in the for-loop are similar and do not depend on each other. The parallel computing should be a good idea to accelerate our program's speed!</p>
 <p>A sample Python parallel computing code (from <a href="https://docs.python.org/3/library/multiprocessing.html">https://docs.python.org/3/library/multiprocessing.html</a>) is shownn as below:</p>
 
 </div>
@@ -13254,7 +13249,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Problem-1">Problem 1<a class="anchor-link" href="#Problem-1">&#182;</a></h4>
+<h4 id="3.1.1-Problem-1">3.1.1 Problem 1<a class="anchor-link" href="#3.1.1-Problem-1">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13271,7 +13266,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Solution-for-Problem-1">Solution for Problem 1<a class="anchor-link" href="#Solution-for-Problem-1">&#182;</a></h4>
+<h4 id="3.1.2-Solution-for-Problem-1">3.1.2 Solution for Problem 1<a class="anchor-link" href="#3.1.2-Solution-for-Problem-1">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13287,7 +13282,7 @@ It greatly accelerates the computing speed.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Problem-2">Problem 2<a class="anchor-link" href="#Problem-2">&#182;</a></h4>
+<h4 id="3.1.3-Problem-2">3.1.3 Problem 2<a class="anchor-link" href="#3.1.3-Problem-2">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13303,7 +13298,7 @@ When the extract-by-mask funtion is applied to the global flow accumulation rast
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Solution-for-Problem-2">Solution for Problem 2<a class="anchor-link" href="#Solution-for-Problem-2">&#182;</a></h4>
+<h4 id="3.1.4-Solution-for-Problem-2">3.1.4 Solution for Problem 2<a class="anchor-link" href="#3.1.4-Solution-for-Problem-2">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13402,7 +13397,7 @@ When the extract-by-mask funtion is applied to the global flow accumulation rast
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="I/O-speed">I/O speed<a class="anchor-link" href="#I/O-speed">&#182;</a></h3>
+<h3 id="3.2-I/O-speed">3.2 I/O speed<a class="anchor-link" href="#3.2-I/O-speed">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -13439,7 +13434,7 @@ When the extract-by-mask funtion is applied to the global flow accumulation rast
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h2>
+<h2 id="4.-Summary">4. Summary<a class="anchor-link" href="#4.-Summary">&#182;</a></h2>
 </div>
 </div>
 </div>
