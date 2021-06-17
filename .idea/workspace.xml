@@ -20,7 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e086be1f-2695-42be-8cf6-175ebe54a83a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/posts_files/2021-03-24 two disadvantages of the ESRI File Geodatabase.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +73,8 @@
       <workItem from="1616592922482" duration="615000" />
       <workItem from="1616601670766" duration="1120000" />
       <workItem from="1616642381684" duration="609000" />
-      <workItem from="1622350953920" duration="936000" />
+      <workItem from="1622350953920" duration="1567000" />
+      <workItem from="1623941224929" duration="815000" />
     </task>
     <servers />
   </component>
