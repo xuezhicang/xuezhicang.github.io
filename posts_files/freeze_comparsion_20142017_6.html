@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>Freeze Perspectives (by MRCC) - ALPHA (TEST)</title>
+		
+		<style>
+		    html, body, #viewDiv {padding:0; margin:0; height:100%; width:100%; }
+			
+
+		</style>
+		
+		<link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
+		<script src="https://js.arcgis.com/4.7/"></script>
+		
+		<script>
+		var map, view, ptsLayer, cwasLayer, gLayer, Grphc, symbolHL, infoDiv, params, params1, FFrisk_Renderer, FFprob_Renderer,first_or_last ;
+		
+		require([
+			"esri/config",
+			"esri/Map",
+			"esri/views/MapView",
+			"esri/layers/FeatureLayer",
+			"esri/layers/MapImageLayer",
+			"esri/layers/GraphicsLayer",
+			"esri/Graphic",
+			"esri/symbols/SimpleMarkerSymbol",
+			"esri/renderers/ClassBreaksRenderer",
+			"esri/renderers/UniqueValueRenderer",
+			"esri/widgets/Expand",
+			"esri/widgets/Legend",
+			"esri/widgets/BasemapGallery",
+			"esri/widgets/Search",
+
+			"dojo/dom-construct",
+			"dojo/parser",
+			
+			"dojo/domReady!"
+		], function(esriConfig, Map, MapView, FeatureLayer, MapImageLayer, GraphicsLayer, Graphic, SimpleMarkerSymbol, ClassBreaksRenderer, UniqueValueRenderer, Expand, Legend, BasemapGallery, Search,domConstruct, parser)
+		{
+			//parser.parse();
+			Grphc = Graphic;
+				
+			// Get the host of this htm file
+			thishost = window.location.host;
+						
+			// Run mapsdown check
+			//checkmapsdown(thishost);
+			
+			// CORS and other settings
+			esriConfig.request.corsEnabledServers.push('gismaps.isws.illinois.edu');
+			esriConfig.request.corsEnabledServers.push('mrcc.isws.illinois.edu');
+			esriConfig.request.corsEnabledServers.push('mrcc.illinois.edu');
+			
+			
+			// Arrays of new parameters
+		params1 = [['2013-14','0'],['2014-15','1'],['2015-16','2'],['2016-17','3']];	
+    params2 = [['First 32°F','diff_f_32_days'],['First 28°F','diff_f_28_days'],['Last 28°F','diff_l_28_days'],['Last 32°F','diff_l_32_days']];
+    params3 = [['Diff from median date',0],['Ranking (earliest)',4],['Ranking (latest)',4]];
+    
+    params = [];
+    for (i in params2) {
+    thisp = params2[i];
+
+    params.push([  thisp[0],thisp[1]]);
+    }
+    console.log(params)
+			
+
+			
+			// Create Map
+		    map = new Map({basemap:'gray'});
+			// Create MapView
+		    view = new MapView({container:'viewDiv', map:map, zoom:4, center:[-100.0,42.25]});
+			
+			// CWAs feature layer
+
+    arr_layer = [];
+    
+    for (var i = 0; i < 8; i++) {
+
+     var url = 'https://gismaps.isws.illinois.edu/arcgis/rest/services/MRCC/freeze_perspectives/MapServer/'+i.toString();
+     
+      if (i==0){
+      ptsLayer_temp = new FeatureLayer({url:url, outFields:["*"],visible: true});
+        
+      }
+      else{
+        ptsLayer_temp = new FeatureLayer({url:url, outFields:["*"],visible: false});
+      }
+      
+      arr_layer.push(ptsLayer_temp);
+      map.add(arr_layer [i]);
+    }
+    
+    
+    
+
+
+
+    //arr_layer[0].visible = false
+    //arr_layer[1].visible = true
+    
+    
+    
+
+
+			
+			
+			
+			// Graphics layer for station point highlight
+			gLayer = new GraphicsLayer();
+			map.add(gLayer);
+		
+		
+			// Create symbols
+			var smstype = 'simple-marker';
+			var smsstyle = 'circle';
+			var smsstyle_ontime = 'diamond';
+			var smsoutln = '{color:[[0,0,0,1.0], width:0.72}';
+			var smsoutln_after11 = '{color:[144,12,1,1.0], width:11px}';
+
+			symbolHL = new SimpleMarkerSymbol({style:'circle', color:[153,238,0,0.6], size:'16px', outline:{color:[255,255,255,0.5], width:0.4} });
+			var nullSymbol = new SimpleMarkerSymbol({style:smsstyle, size:'4px', color:[0,0,0,1.0], outline:smsoutln });
+			
+			
+			var diff_class_first = [ 	
+									//{minValue:500, maxValue:500, label:'No data', symbol:{type:smstype, style:smsstyle, color:[129,15,124,1.0], size:'0.001px', outline:smsoutln} },
+									{minValue:600, maxValue:600, label:'No freeze', symbol:{type:smstype, style:'diamond', color:[0,0,0,1.0], size:'5px', outline:smsoutln} },
+									{minValue:-99, maxValue:-30.1, label:'Extremely Early (≥31 days)', symbol:{type:smstype, style:smsstyle, color:[129,15,124,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-30, maxValue:-20.1, label:'Very Early (21-30 days)', symbol:{type:smstype, style:smsstyle, color:[136,86,167,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-20, maxValue:-10.1, label:'Early (11-20 days)', symbol:{type:smstype, style:smsstyle, color:[140,150,198,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-10, maxValue:-3.1, label:'Mildly Early (4-10 days)', symbol:{type:smstype, style:smsstyle, color:[179,205,227,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-3, maxValue:3, label:'Within 3 Days (≤3 days)', symbol:{type:smstype, style:'diamond', color:[255,255,255,1.0], size:'8px', outline:smsoutln} },
+									{minValue:3.1, maxValue:10, label:'Mildly Late (4-10 days)', symbol:{type:smstype, style:smsstyle, color:[254,204,92,1.0], size:'6px', outline:smsoutln} },
+									{minValue:10.1, maxValue:20, label:'Late (11-20 days)', symbol:{type:smstype, style:smsstyle, color:[253,141,60,1.0], size:'6px', outline:smsoutln} },
+									{minValue:20.1, maxValue:30, label:'Very Late (21-30 days)', symbol:{type:smstype, style:smsstyle, color:[240,59,32,1.0], size:'6px', outline:smsoutln} },
+									{minValue:30.1, maxValue:99, label:'Extremely Late (≥31 days)', symbol:{type:smstype, style:smsstyle, color:[189,0,38,1.0], size:'6px', outline:smsoutln} }
+
+								];
+			
+			
+			
+ 			var diff_class_last = [ 	
+									//{minValue:499, maxValue:501, label:'No data', symbol:{type:smstype, style:smsstyle, color:[255,255,255,1.0], size:'0.001px', outline:smsoutln} },
+									{minValue:599, maxValue:601, label:'No freeze', symbol:{type:smstype, style:'diamond', color:[0,0,0,1.0], size:'5px', outline:smsoutln} },									
+									{minValue:-99, maxValue:-30.1, label:'Extremely Early (≥31 days)', symbol:{type:smstype, style:smsstyle, color:[189,0,38,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-30, maxValue:-20.1, label:'Very Early (21-30 days)', symbol:{type:smstype, style:smsstyle, color:[240,59,32,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-20, maxValue:-10.1, label:'Early (11-20 days)', symbol:{type:smstype, style:smsstyle, color:[253,141,60,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-10, maxValue:-3.1, label:'Mildly Early (4-10 days)', symbol:{type:smstype, style:smsstyle, color:[254,204,92,1.0], size:'6px', outline:smsoutln} },
+									{minValue:-3, maxValue:3, label:'Within 3 Days (≤3 days)', symbol:{type:smstype, style:'diamond', color:[255,255,255,,1.0], size:'8px', outline:smsoutln} },
+									{minValue:3.1, maxValue:10, label:'Mildly Late (4-10 days)', symbol:{type:smstype, style:smsstyle, color:[179,205,227,1.0], size:'6px', outline:smsoutln} },
+									{minValue:10.1, maxValue:20, label:'Late (11-20 days)', symbol:{type:smstype, style:smsstyle, color:[140,150,198,1.0], size:'6px', outline:smsoutln} },
+									{minValue:20.1, maxValue:30, label:'Very Late (21-30 days)', symbol:{type:smstype, style:smsstyle, color:[136,86,167,1.0], size:'6px', outline:smsoutln} },
+									{minValue:30.1, maxValue:99, label:'Extremely Late (≥31 days)', symbol:{type:smstype, style:smsstyle, color:[129,15,124,1.0], size:'6px', outline:smsoutln} }
+
+								];	
+								
+ 			var ranking_blue_mode = [ 	
+									//{minValue:-99, maxValue:-0.9, label:'No data', symbol:{type:smstype, style:smsstyle, color:[129,15,124,1.0], size:'0.0001px', outline:smsoutln} },
+									{minValue:-0.5, maxValue:0.5, label:'No freeze', symbol:{type:smstype, style:'diamond', color:[0,0,0,1.0], size:'4px', outline:smsoutln} },
+									{minValue:10.9, maxValue:999, label:'11th~', symbol:{type:smstype, style:'diamond', color:[169,169,169,1.0], size:'5px', outline:{color: [0, 0, 0, 0],
+    width: "5px"}} },
+    							{minValue:5.9, maxValue:10.1, label:'6 th~10 th', symbol:{type:smstype, style:smsstyle, color:[241,238,246,1.0], size:'6px', outline:smsoutln} },
+    							{minValue:4.9, maxValue:5.1, label:'5 th', symbol:{type:smstype, style:smsstyle, color:[208,209,230,,1.0], size:'6px', outline:smsoutln} },
+    							{minValue:3.9, maxValue:4.1, label:'4 th', symbol:{type:smstype, style:smsstyle, color:[166,189,219,1.0], size:'6px', outline:smsoutln} },
+									{minValue:2.9, maxValue:3.1, label:'3 rd', symbol:{type:smstype, style:smsstyle, color:[116,169,207,1.0], size:'6px', outline:smsoutln} },
+									{minValue:1.9, maxValue:2.1, label:'2 nd', symbol:{type:smstype, style:smsstyle, color:[43,140,190,1.0], size:'6px', outline:smsoutln} },	
+    							{minValue:0.9, maxValue:1.1, label:'1 st', symbol:{type:smstype, style:'diamond', color:[4,90,141,1.0], size:'8px', outline:smsoutln} }	
+								];			
+								
+ 			var ranking_red_mode = [ 	
+									//{minValue:-99, maxValue:-0.9, label:'No data', symbol:{type:smstype, style:smsstyle, color:[129,15,124,1.0], size:'0.0001px', outline:smsoutln} },
+									{minValue:-0.5, maxValue:0.5, label:'No freeze', symbol:{type:smstype, style:'diamond', color:[0,0,0,1.0], size:'4px', outline:smsoutln} },
+									{minValue:10.9, maxValue:999, label:'11th~', symbol:{type:smstype, style:'diamond', color:[169,169,169,1.0], size:'5px', outline:{color: [0,0, 0, 0],
+    width: "5px"}} },
+									{minValue:5.9, maxValue:10.1, label:'6 th~10 th', symbol:{type:smstype, style:smsstyle, color:[255,255,178,1.0], size:'6px', outline:smsoutln} },
+									{minValue:4.9, maxValue:5.1, label:'5 th', symbol:{type:smstype, style:smsstyle, color:[254,217,118,,1.0], size:'6px', outline:smsoutln} },
+									{minValue:3.9, maxValue:4.1, label:'4 th', symbol:{type:smstype, style:smsstyle, color:[254,178,76,1.0], size:'6px', outline:smsoutln} },
+									{minValue:2.9, maxValue:3.1, label:'3 rd', symbol:{type:smstype, style:smsstyle, color:[253,141,60,1.0], size:'6px', outline:smsoutln} },
+									{minValue:1.9, maxValue:2.1, label:'2 nd', symbol:{type:smstype, style:smsstyle, color:[240,59,32,1.0], size:'6px', outline:smsoutln} },	
+									{minValue:0.9, maxValue:1.1, label:'1 st', symbol:{type:smstype, style:'diamond', color:[189,0,38,1.0], size:'8px', outline:smsoutln} }    
+								];	
+
+
+								
+			// Create renderers
+			var startfield = 'diff_f_32_days';
+			diff_class_first_Renderer = {type:'class-breaks', field:startfield, classBreakInfos:diff_class_first};
+			diff_class_last_Renderer = {type:'class-breaks', field:startfield, classBreakInfos:diff_class_last};
+			var startfield_ranking = 'fst_32_ranking_asc';
+			ranking_blue_mode_Renderer = {type:'class-breaks', field:startfield_ranking,  classBreakInfos:ranking_blue_mode};
+			ranking_red_mode_Renderer = {type:'class-breaks', field:startfield_ranking,  classBreakInfos:ranking_red_mode};
+		
+		
+   
+			// Set up and place MRCC Logo
+			var logo = domConstruct.create("img", {
+				src:"/gismaps/images/mrcc_logo3pc_horiz-vector.png", id:"logo", title:"MRCC logo", style:"width:200px" });
+			view.ui.add(logo, "bottom-right");
+		
+			// Set up view onclick event listener
+			view.on('click', onMapClick);
+			
+			// When the view is loaded
+			view.when(function() {
+				console.log('view ready');
+
+				// Set up and place Search
+				var searchBar = new Search({view:view });
+				view.ui.add(searchBar, "top-left");
+				
+				// Set up Basemap Gallery
+				var basemapGallery = new BasemapGallery({view: view });
+				// Set up and place an Expand for the Basemap Gallery
+				basemapExpand = new Expand({
+					expandIconClass: 'esri-icon-basemap',
+					expandTooltip: 'Expand Basemap Gallery',
+					view: view,
+					group: 'topleft',
+					content: basemapGallery
+				});
+				view.ui.add(basemapExpand, "top-left");
+				
+				
+				// Create Symbology div
+				var sDiv = document.createElement('div');
+				sDiv.innerHTML = '<div style="width:170px; border:1px solid black; background-color:#FFFFFF; padding:8px">' +
+									'<big><strong>Symbolize:</strong></big>'+
+									'<p style="padding-left:8px">'+
+									'<div style="width:100%; text-align:left">'+'Season:'+'</div>'+
+										'<select id="selYear" onchange="refresh()">' +
+											'<option value="1">'+(params1[0])[0]+'</option>' +
+											'<option value="1">'+(params1[1])[0]+'</option>' +
+											'<option value="1">'+(params1[2])[0]+'</option>' +
+											'<option value="1">'+(params1[3])[0]+'</option>' +
+                  
+                
+										'</select><br>'+
+										' <br>'+
+										  '<div style="width:100%; text-align:left">'+'Freeze date type:'+'</div>'+
+										  
+										  
+										'<select id="selAmt" onchange="refresh()">' +
+											'<option value="1">'+(params2[0])[0]+'</option>' +
+											'<option value="1">'+(params2[1])[0]+'</option>' +
+											'<option value="1">'+(params2[2])[0]+'</option>' +
+											'<option value="1">'+(params2[3])[0]+'</option>' +
+
+										'</select><br>'+
+										' <br>'+
+										  '<div style="width:100%; text-align:left">'+'Visualization Type:'+'</div>'+
+										  
+										  '<select id="selPro" onchange="refresh()">' +
+											'<option value="1">'+'Diff from median date'+'</option>' +
+											'<option value="1">'+'Ranking (earliest)'+'</option>' +
+											'<option value="1">'+'Ranking (latest)'+'</option>' +
+											
+											
+											
+										'</select><br>'+
+										' <br>'+
+									'</p>'+
+								'</div>';
+								
+								
+				// Set up and place an Expand for the Symbology div
+				symbExpand = new Expand({
+					expandIconClass: 'esri-icon-layers',
+					expandTooltip: 'Expand Symbology Options',
+					view: view,
+					group: 'topleft',
+					content: sDiv
+				});
+				view.ui.add(symbExpand, 'top-left');
+				// Set symbExpand to start off as expanded
+				symbExpand.expanded = true;
+				
+				// Set up Legend widget
+				legend = new Legend({
+					container: document.createElement('div'),
+					view: view,
+
+					layerInfos: [{layer:arr_layer[0], title:"Legend"}]
+				});
+
+				console.log(legend.layerInfos)
+
+
+				// Set up and place an Expand for the Legend widget
+				legendExpand = new Expand({
+				    expandIconClass: 'esri-icon-layer-list',  
+				    expandTooltip: 'Expand Legend',
+				    view: view,
+					group: 'topleft',
+				    content: legend.domNode
+				});
+				view.ui.add(legendExpand, "top-left");
+				
+				// Create Info div, set style
+				infoDiv = document.createElement('div');	
+				infoDiv.style.border = '1px solid black';
+				infoDiv.style.backgroundColor = 'white';
+				infoDiv.style.width = '300px';
+				infoDiv.style.padding = '8px';
+				infoDiv.innerHTML = '<p style="width:100%; text-align:center"><b>Click any point for more information.</b></p>';
+				
+				// Set up and place an Expand for the Info div
+				infoExpand = new Expand({
+					expandIconClass: 'esri-icon-table',
+					expandTooltip: 'Expand Info Pane',
+					view: view,
+					content: infoDiv
+				});
+				view.ui.add(infoExpand, "top-right");
+				// Set infoExpand to start off as expanded
+				infoExpand.expanded = true;
+		  
+			});
+			
+			// When the layerview is created (layer loaded)
+			arr_layer[0].on('layerview-create', function(evt){
+				// Run the refresh function
+				refresh()
+			});
+			
+		});
+		
+		
+		// ParamTable Function for the Site Info pane
+		function ParamTable(data) {
+		  
+			var strvalue = '';
+	
+			for (i in params) {
+
+				console.log("perpare the table");
+				
+				fieldnm2 = (params[i])[1];
+				console.log(fieldnm2)
+
+				console.log(fieldnm2)
+				val2 = data[fieldnm2];
+				console.log(val2)
+        
+				if (val2 >0 && val2<300){
+				  val2 = val2 + ' day(s) later'	}
+				  
+				if (val2 <0){
+				  val2 = val2*-1 + ' day(s) earlier'}
+				
+				if (val2 == 0){
+				  val2 = 'As the same as the median date'	}
+     
+				if (val2 == 600){
+				  val2 = 'No freeze'
+				} 
+				if (val2 == 500){
+				  val2 = 'No data'
+				} 
+				
+				strvalue += '<tr><td style="width:30%"><b>'+(params[i])[0]+'</b>'+'</td>' 
+						 + '<td style="width:35%">'+val2+'</td></tr>';
+			}
+			return strvalue;
+		}
+		// ParamTable_asc Function for the freeze ranking (early)
+		function ParamTable_ranking_asc(data) {
+		  
+			var strvalue = '';
+	    params_asc = ['fst_32_ranking_asc','fst_28_ranking_asc','lst_28_ranking_asc','lst_32_ranking_asc']
+			for (i in params_asc) {
+				console.log("perpare the table");
+				field_asc = params_asc[i];
+				console.log(field_asc);
+				val2 = data[field_asc];
+				console.log(val2)
+        var j_temp = val2 % 10,
+        k_temp = val2 % 100; 
+        
+		if (val2 >-1.5 && val2<-0.5){val2 = 'No data';	}
+		else if (val2 ==0){val2 = 'No freeze';}
+        else if (j_temp == 1 && k_temp != 11) {
+            val2 =  val2 + "st early";}
+        else if (j_temp == 2 && k_temp != 12) {
+            val2 =  val2 + "nd early";}
+        else if (j_temp == 3 && k_temp != 13) {
+            val2 =  val2 + "rd early";}
+        else{ val2 =  val2 + "th early";}
+    
+		strvalue += '<tr><td style="width:30%"><b>'+(params[i])[0]+'</b>'+'</td>' 
+					+ '<td style="width:35%">'+val2+'</td></tr>';}
+			return strvalue;
+		}
+		// ParamTable_asc Function for the freeze ranking (late)
+		function ParamTable_ranking_desc(data) {
+		  
+		var strvalue = '';
+	    params_asc = ['fst_32_ranking_desc','fst_28_ranking_desc','lst_28_ranking_desc','lst_32_ranking_desc']
+		for (i in params_asc) {
+			console.log("perpare the table");
+			field_asc = params_asc[i];
+			console.log(field_asc);
+			val2 = data[field_asc];
+			console.log(val2)
+			var j_temp = val2 % 10,
+			k_temp = val2 % 100; 
+        
+			if (val2 >-1.5 && val2<-0.5){val2 = 'No data';	}
+			else if (val2 ==0){val2 = 'No freeze';}
+			else if (j_temp == 1 && k_temp != 11) {
+				val2 =  val2 + "st late";}
+			else if (j_temp == 2 && k_temp != 12) {
+				val2 =  val2 + "nd late";}
+			else if (j_temp == 3 && k_temp != 13) {
+				val2 =  val2 + "rd late";}
+			else{ val2 =  val2 + "th late";}
+    
+			strvalue += '<tr><td style="width:30%"><b>'+(params[i])[0]+'</b>'+'</td>' 
+					+ '<td style="width:35%">'+val2+'</td></tr>';}
+			return strvalue;
+		}
+			
+		function onMapClick(event) {
+			// Clear existing point highlight
+			gLayer.removeAll();
+
+			// Figure out if a point was clicked on
+			view.hitTest(event.screenPoint).then(function(response){
+				var ptgeom = response.results[0].graphic.geometry;
+				
+				if (ptgeom.type == 'point') {
+					// Get info about this point using functions above
+					var sitedata = (response.results[0].graphic.attributes);
+					
+					console.log(sitedata);
+					start_year = sitedata['start_time'];
+					console.log(start_year );
+					end_year = start_year + 1;
+					stn_name = sitedata['NAME'];
+					state_name = sitedata['STATE'];
+
+					var siteparams = ParamTable(sitedata);
+					var siteparams_ranking;
+					var siteparams_ranking_asc = ParamTable_ranking_asc(sitedata);
+					var siteparams_ranking_desc = ParamTable_ranking_desc(sitedata);
+					
+					for (i in params3) { 
+						if ((document.getElementById('selPro')).selectedOptions[0].text == (params3[i])[0])  {
+							console.log((params3[i])[0]);
+							console.log('type_freeze_data');
+							type_freeze_data = (params3[i])[1]; 
+							asc_desc_freeze_ranking =(params3[i])[0]; 
+							console.log('freeze data type=',type_freeze_data);
+							} }
+			    
+					if (type_freeze_data==0){
+						// comparsion info in Info pane
+						siteinfohtml = 	'<div style="width:100%; text-align:center"><big><strong>Comparsion of Freeze date</strong></big></div><br>'+
+									  '<div style="width:100%; text-align:center">'+'7/1/'+start_year+' - 6/30/'+end_year+' vs Median Date'+'</div>' +
+									  '<div style="width:100%; text-align:center">'+stn_name+', '+state_name+'</div><br>'
+										+ '<table border="1" style="width:100%; text-align:center">'
+										 + '<tr><th style="width:30%">     </th>' 
+										 + '<th style="width:35%">'+'Difference from median date'+'</th></tr>'
+										+ siteparams
+										+ "</table>"+
+										'<br><div style="width:100%; text-align:left">'+"Median dates calculated from 1980-81 to 2009-10,defined as 50th percentile"+"</div>";
+						infoDiv.innerHTML = siteinfohtml;
+						// Expand Info pane
+						infoExpand.expanded = true;
+						// Add point highlight to gLayer
+						var gHilite = new Grphc({symbol:symbolHL, geometry:ptgeom});
+						gLayer.add(gHilite);	}
+					
+					else if(type_freeze_data == 4){
+						if(asc_desc_freeze_ranking[9] == 'l' ){
+							siteparams_ranking = siteparams_ranking_desc;}
+						else if(asc_desc_freeze_ranking[9] == 'e'){
+							siteparams_ranking = siteparams_ranking_asc;}
+
+					// ranking info in Info pane
+					siteinfohtml = 	'<div style="width:100%; text-align:center"><big><strong>Ranking of Freeze date</strong></big></div><br>'+
+					              '<div style="width:100%; text-align:center">'+'For period 7/1/'+start_year+' to 6/30/'+end_year+'</div>' +
+					              '<div style="width:100%; text-align:center">'+stn_name+', '+state_name+'</div><br>'
+									+ '<table border="1" style="width:100%; text-align:center">'
+									 + '<tr><th style="width:30%">     </th>' 
+									 + '<th style="width:35%">'+'Date Ranking'+'</th></tr>'
+									+ siteparams_ranking
+									+ "</table>"+
+									'<br><div style="width:100%; text-align:left">'+"Ranking dates calculated from 1980-81 to 2016-17"+"</div>";
+					infoDiv.innerHTML = siteinfohtml;
+					// Expand Info pane
+					infoExpand.expanded = true;
+					
+					// Add point highlight to gLayer
+					var gHilite = new Grphc({symbol:symbolHL, geometry:ptgeom});
+					gLayer.add(gHilite);					  
+					}
+				}
+				else {
+					// Clear out Info pane
+					infoDiv.innerHTML = '<p style="width:100%; text-align:center"><b>Click any point for more information.</b></p>';
+				}
+			});
+		}
+		
+	
+		function refresh(lyrnum) {
+			// Clear point highlight
+			gLayer.removeAll();
+			
+			// Get selected parameters from dropdowns
+			var p1, p2, par1, par2, p3, par3; 
+			
+			//unvisiable all the layer
+			for (i=0;i<8;i++){
+			  arr_layer[i].visible = false}
+			  
+			//console.log(document.getElementById('selYear')).selectedOptions[0].text)
+			for (i in params1) { 
+			  arr_layer[i].visible = false;
+				if ((document.getElementById('selYear')).selectedOptions[0].text == (params1[i])[0])  {
+				  console.log("fdsfasfasfasdfasdfasdfsadf")
+				  arr_layer[i].visible = true;
+					p1 = (params1[i])[1]; par1 = (params1[i])[0]; } 
+			}
+			
+			console.log(p1);
+			
+			for (i in params2) { 
+				if ((document.getElementById('selAmt')).selectedOptions[0].text == (params2[i])[0])  {
+					p2 = (params2[i])[1]; par2 = (params2[i])[0];} 
+			}
+			console.log('p1',p1, ' p2',p2);
+			
+			for (i=0;i<8;i++){
+			  arr_layer[i].visible = false
+			  
+			}
+			for (i in params3) { 
+			  if ((document.getElementById('selPro')).selectedOptions[0].text == (params3[i])[0])  {
+			    console.log((params3[i])[0]);
+					console.log('vislization type');
+			    p3 = (params3[i])[1]; par3 =(params3[i])[0]; 
+			    
+			    arr_layer[Number(p3)].visible = false;
+			    i_ranking = Number(p1)+Number(p3);
+			    console.log("i_ranking=",i_ranking)
+			    arr_layer[Number(i_ranking)].visible = true;
+
+			  } 
+
+			}
+			console.log('p1',p1, ' p2',p2, ' p3', p3)
+			
+
+
+			first_or_last = par2[0].toLowerCase();
+
+			// Calculate field name based on inputs
+			if (p3 == 0){
+			field = p2//p1 + '_' + p2 + '_' + 'days';
+			console.log('field =', field);
+			}
+			else if(p3 == 4){
+				if (par2[0] == 'F') {fst_or_lst = 'fst';}
+				else if (par2[0] == 'L')  {fst_or_lst = 'lst';}
+
+				if (par2.slice(-4)[0] == '2') {degree = '28';}
+				else if (par2.slice(-4)[0] == '3')  {degree  = '32';}
+				
+				if (par3[9] == 'l') {ranking_method = 'desc';}
+				else if (par3[9] == 'e')  {ranking_method   = 'asc';}
+				field_str = fst_or_lst + '_' + degree + '_ranking_' + ranking_method
+				field = field_str
+				console.log('field =', field);
+  			
+			}
+
+			// Figure out which renderer to use
+			var thisRenderer;
+			if(p3 == 0){
+
+  			if (field[5] == 'f') {thisRenderer = diff_class_first_Renderer; console.log(field);}
+  			else if (field[5] == 'l')  {thisRenderer = diff_class_last_Renderer;console.log(field); }
+  			// Set title for legend
+			  thisRenderer.legendOptions = {title: ('Comparsion of '+' '+par2+' Freeze Date') };
+			}
+
+			else if(p3 == 4 && par3 == "Ranking (earliest)"){
+			  if (field[0] == 'f' ){thisRenderer = ranking_blue_mode_Renderer;console.log(field);}
+			  else if (field[0] == 'l')  {thisRenderer = ranking_red_mode_Renderer;console.log(field); }
+			 // Set title for legend
+			  thisRenderer.legendOptions = {title: ('Ranking (earliest) of '+' '+par2) };
+			}
+
+			else if(p3 == 4 && par3 == "Ranking (latest)"){
+			  if (field[0] == 'f' ){thisRenderer = ranking_red_mode_Renderer;console.log(field);}
+			  else if (field[0] == 'l')  {thisRenderer = ranking_blue_mode_Renderer;console.log(field); }
+			  // Set title for legend
+			  thisRenderer.legendOptions = {title: ('Ranking (latest) of '+' '+par2) };			  
+			}			
+			
+
+			
+			// Set field in renderer
+			thisRenderer.field = field;
+		
+			// Apply renderer to feature layer
+			arr_layer[i_ranking].renderer = thisRenderer;
+			
+			//update the legend
+			legend.layerInfos = [{layer:arr_layer[i_ranking], title:"Legend"}]
+		
+				
+				
+			
+			// Refresh layer
+			arr_layer[i_ranking].refresh();
+			
+			
+			
+
+		}	
+		
+
+		
+		
+		function checkmapsdown(thishost)  {
+			// Decide if we're checking the text file, depends on the host
+			var checkTF = false;
+			if (thishost == 'mrcc.illinois.edu' || thishost == 'mrcc.isws.illinois.edu' || thishost == 'mrcc.sws.uiuc.edu') {
+				var txtfile = '/gismaps/mapsdown.txt';
+				checkTF = true;
+			}
+			// Check whether the maps are down, based on a text file
+			if (checkTF == true) {
+				var rawFile = new XMLHttpRequest();
+				rawFile.open('GET', txtfile, false);
+				rawFile.onreadystatechange = function ()  {
+					if (rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status == 0) )  {
+						var textfromfile = rawFile.responseText;
+						if (textfromfile == 'True')  {
+							// Redirect to our 'maps down' page
+							mapsdownURL = '/gismaps/atlasDown.jsp';
+							window.location.replace(mapsdownURL);						
+						}
+					}
+				}
+				rawFile.send(null);
+			}
+		}
+		
+		
+		</script>
+		
+	</head>
+	<body>
+	
+		<div id="viewDiv"></div>
+
+	</body>
+</html>
