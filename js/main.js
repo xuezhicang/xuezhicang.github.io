@@ -91,7 +91,7 @@ $(document).ready(function() {
 
 
      $(".expander").on("load", function () {
-    if ($(".expander").text().trim() === "show all") {
+    if ($(".expander").text() === "show all") {
       $(".panel-collapse").collapse('show');
     }
     });
