@@ -90,7 +90,7 @@ $(document).ready(function() {
   //  });
 
 
-     $(.expander).on("load", function () {
+     $(".expander").on("load", function () {
     if ($(".expander").text().trim() === "show all") {
       $(".panel-collapse").collapse('show');
     }
