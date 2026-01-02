@@ -92,7 +92,7 @@ $(document).ready(function() {
 
      $(window).on("load", function () {
     if ($(".expander").text().trim() === "show all") {
-      $(".panel-collapse").trigger("show");
+      $(".panel-collapse").collapse("show");
     }
     });
 
